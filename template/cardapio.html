@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio - Tudo Mais Doce</title>
+    
+    <!-- Links de Estilo -->
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Scripts Externos -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+    <main class="cardapio-index-container">
+        <!-- Cabeçalho -->
+        <header class="cardapio-header">
+            <nav class="cardapio-back-button">
+                <a href="/index.html" aria-label="Voltar para página inicial">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+            </nav>
+            
+            <figure class="logo-container">
+                <img id="logoLoja" src="/uploads/logos/logo.jpg" alt="Logo da loja" class="img-preview">
+            </figure>
+        </header>
+
+        <!-- Conteúdo Principal -->
+        <article class="cardapio-content">
+            <p class="cardapio-main-title">CARDÁPIO</p>
+
+            <!-- Linha Separador -->
+            <div class="cardapio-section-divider"></div>
+
+
+            <!-- Seção de Informações -->
+            <section class="cardapio-info-section">
+                <div class="cardapio-info-cardapio">
+                    <div class="info-item">
+                        <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                        <span id="telefone-whatsapp"></span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <i class="fas fa-clock" aria-hidden="true"></i>
+                        <span>Entrega aproximada: </span>
+                        <span id="tempoEntrega"></span>min.<span></span>
+                    </div>
+                    
+                    <div class="info-item">
+                        <i class="fas fa-motorcycle" aria-hidden="true"></i>
+                        <span>Taxa de Entrega: R$</span>
+                        <span id="taxa-entrega"></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Linha Separador -->
+            <div class="cardapio-section-divider"></div>
+
+
+            <!-- Seção do Produto -->
+            <section class="cardapio-product-section">
+
+                <div class="faixa-header">                    
+                    <header class="product-header">
+                        <h2 class="cardapio-product-titulo">
+                            <span class="cardapio-product-nome"></span>
+                            <span class="cardapio-product-ml">
+                                <span>ml</span>
+                            </span>
+                            <span class="cardapio-product-valor">
+                                R$<span class="cardapio-product-preco"></span>
+                            </span>
+                        </h2>
+                    </header>
+                </div>
+            
+
+                <div class="cardapio-produto-card">
+                    <figure class="product-image-container">
+                        <img id="imagemProduto" src="/uploads/produtos/salada.jpeg" alt="Salada de Frutas" class="cardapio-product-image">
+                </div>
+
+
+
+                    <div class="product-details">
+                        <span class="descricao-produto">Descrição:<p class="cardapio-product-descricao"></p></span>
+                    </div>
+
+                    <!-- Linha Separador -->
+                    <div class="cardapio-section-divider"></div>
+
+
+                    <!-- Seção de Personalização -->
+                    <section class="product-customization">
+                        <!-- Acréscimos -->
+                        <div class="cardapio-acrescimos-section">
+                            <h3 class="cardapio-subtitulo-destaque">
+                                Acrescentar Porções 
+                                <span class="cardapio-opcao">(opcional)</span>
+                            </h3>
+                            <ul class="cardapio-acrescimos-lista"></ul>
+                        </div>
+
+
+                        <!-- Linha Separador -->
+                        <div class="cardapio-section-divider"></div>
+
+                        <!-- Seleção de Creme -->
+                        <div class="cardapio-creme-section">
+                            <h3 class="cardapio-subtitulo-destaque">
+                                Escolha o creme 
+                                <span class="cardapio-obrigatorio">(obrigatório)</span>
+                            </h3>
+                            <select id="cardapio-creme" class="cardapio-creme-select" required>
+                                <option value="" disabled selected>Escolha</option>
+                            </select>
+                        </div>
+            
+                        <br>
+
+                        <!-- Observações -->
+                        <div class="cardapio-observacoes-section">
+                            <label for="cardapio-observacao" class="cardapio-observacoes-label">
+                                Alguma observação?
+                            </label>
+                            <textarea id="cardapio-observacao" 
+                                      class="cardapio-observacoes-textarea" 
+                                      placeholder="Ex: Sem banana, mais morangos..."></textarea>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </article>
+
+        <!-- Controles de Pedido -->
+        <footer class="cardapio-pedido-footer">
+            <div class="cardapio-quantity-control">
+                <button class="cardapio-qtd-btn" id="btn-decrease" aria-label="Reduzir quantidade">
+                    -
+                </button>
+                <span id="cardapio-quantity" class="cardapio-qtd-number">1</span>
+                <button class="cardapio-qtd-btn" id="btn-increase" aria-label="Aumentar quantidade">
+                    +
+                </button>
+            </div>
+
+            <button class="cardapio-add-btn" id="btn-comprar" type="submit">
+                Comprar R$ <span id="cardapio-total"></span>
+            </button>
+        </footer>
+    </main>
+
+    <!-- Scripts Locais -->
+    <script type="module" src="/js/cardapio.js"></script>
+</body>
+</html>

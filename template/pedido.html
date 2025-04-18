@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Pedido - Tudo Mais Doce</title>
+    <link rel="stylesheet" href="../public/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+
+    <div class="pedido-index-container">
+        <!-- Ícone "Voltar" -->
+        <div class="pedido-back-button">
+            <a href="../cardapio.html"><i class="fas fa-arrow-left"></i></a>
+        </div>
+
+        <h3>Resumo do Pedido</h3>
+        <div class="pedido-resumo">
+            <ul id="pedido-resumo-pedido">
+                <!-- Resumo do pedido será preenchido dinamicamente via JavaScript -->
+            </ul>
+        </div>
+
+        <!-- ENDEREÇO -->
+        <h4>Endereço de Entrega</h4>
+        <form id="pedido-enderecoForm">
+
+            <!-- CEP e Ícone de Busca -->
+            <div class="form-group cep-group">
+                <div class="input-group">
+                    <input type="text" id="pedido-cep" name="pedido-cep" required placeholder=" " maxlength="9" inputmode="numeric">
+                    <label for="pedido-cep">CEP</label>
+                    <i class="fas fa-search pedido-cep-icon" id="cep-search-icon"></i>
+                </div>
+            </div>
+            
+            <!-- Logradouro e Número -->
+            <div class="form-group logradouro-group">
+                <div class="input-group">
+                    <input type="text" id="pedido-logradouro" name="pedido-logradouro" required placeholder="">
+                    <label for="pedido-logradouro">Logradouro</label>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="pedido-numero" name="pedido-numero" required placeholder="">
+                    <label for="pedido-numero">Número</label>
+                </div>
+            </div>
+        
+            <!-- Complemento -->
+            <div class="form-group complemento-group">
+                <div class="input-group">
+                    <input type="text" id="pedido-complemento" name="pedido-complemento" placeholder=" ">
+                    <label for="pedido-complemento">Complemento ou Ponto de Referência</label>
+                </div>
+            </div>
+        
+            <!-- Bairro, Cidade e UF -->
+            <div class="form-group localidade-group">
+                <div class="input-group">
+                    <input type="text" id="pedido-bairro" name="pedido-bairro" required placeholder=" ">
+                    <label for="pedido-bairro">Bairro</label>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="pedido-cidade" name="pedido-cidade" required placeholder=" ">
+                    <label for="pedido-cidade">Cidade</label>
+                </div>
+                <div class="input-group">
+                    <input type="text" id="pedido-uf" name="pedido-uf" maxlength="2" required placeholder=" ">
+                    <label for="pedido-uf">UF</label>
+                </div>
+            </div>
+        </form>
+        
+        <h4>Seus Dados</h4>
+        <form id="pedido-dadosForm">
+            <div class="input-group"> 
+                <input type="text" id="pedido-nome" name="pedido-nome" required placeholder=" ">
+                <label for="pedido-nome">Nome Completo:</label>
+            </div>
+            <div class="input-group">
+                <input type="tel" id="pedido-telefone" name="pedido-telefone" maxlength="15" required placeholder=" ">
+                <label for="pedido-telefone">Telefone:</label>
+            </div>
+
+            <button id="pedido-btn" class="pedido-enviar-btn" type="submit">FAZER PEDIDO</button>
+            
+        </form>
+       
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+    <script src="/js/pedido.js"></script>
+
+</body>
+</html>
