@@ -1,0 +1,979 @@
+/* Reset básico */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Estilos globais */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    height: 100vh;
+    justify-content: flex-start;
+    
+}
+
+
+/* Container 2: Botões */
+.container-botoes {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    gap: 20px;
+    padding: 10px;
+    height: 40%;
+    
+}
+
+/* Estilos específicos para o logo */
+.index-logo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 40px;
+    object-fit: cover;
+}
+
+#logoLoja {
+    display: block;
+    margin: 0 auto;
+    max-width: 150px;
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+
+/* Estilos para o título */
+.index-titulo-destaque {
+    color: #0077cc;
+    font-weight: bold;
+    font-size: 1.8rem;
+}
+
+.container-logo-titulo {
+    margin: 20px;
+    width: 100%;
+}
+
+.cardapio-qtd-btn {
+    width: 40px;        /* ou qualquer valor fixo */
+    height: 40px;
+    border-radius: 50%;
+    background-color: #0077cc; /* exemplo de cor */
+    color: white;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.cardapio-qtd-btn:hover {
+    background-color: #00548f; /* cor mais escura no hover */
+}
+
+
+/* Estilos para os botões */
+.index-btn-cardapio, 
+.index-btn-whatsapp, 
+
+.cardapio-add-btn, 
+.pedido-enviar-btn {
+    background-color: #0077cc;
+    color: white;   
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.index-btn-cardapio:hover, 
+.index-btn-whatsapp:hover, 
+.cardapio-qtd-btn:hover, 
+.cardapio-add-btn:hover, 
+.pedido-enviar-btn:hover {
+    background-color: #00548f;
+}
+
+/* Estilos para o link do Instagram */
+.index-instagram-link {
+    font-size: 1rem;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+}
+
+.index-instagram-link span {
+    font-size: 1.1rem;
+    color: #333;
+}
+
+/* Estilos para o footer (status da loja) */
+#index-status-loja {
+    width: 100%;
+    padding: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+
+/* Adicione este CSS no seu arquivo styles.css */
+.cardapio-acrescimos-lista li label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.cardapio-preco-acrescimo {
+    margin-left: auto; /* Empurra o preço para a direita */
+    padding-left: 10px; /* Espaçamento entre nome e preço */
+}
+
+#index-status-loja.online {
+    background-color: green;
+}
+
+#index-status-loja.offline {
+    background-color: red;
+}
+
+.index-status-icon {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Responsividade para telas pequenas */
+@media (max-width: 600px) {
+    .cardapio-header {
+        height: 80px;
+        padding: 0 10px;
+    }
+
+    .cardapio-back-button {
+        top: 8px;
+        left: 8px;
+        font-size: 1.2rem;
+    }
+
+    .logo-container img {
+        height: 50px;
+    }
+}
+
+
+/* Responsividade para mobile */
+@media (max-width: 768px) {
+    .index-logo {
+        width: 100px;
+        height: 100px;
+    }
+
+    .cardapio-back-button {
+        top: 10px;
+        left: 5px;
+        font-size: 1.4rem;
+    }
+
+
+    .index-btn-cardapio, .index-btn-whatsapp {
+        width: 100%;
+    }
+
+    .index-instagram-link {
+        bottom: 80px;
+    }
+}
+
+/* Container principal do cardápio */
+.cardapio-index-container, .pedido-index-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 600px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+
+.pedido-index-container {
+    gap: 20px;
+}
+
+/* Container para o botão e logo */
+
+
+/* Botão de voltar */
+.cardapio-back-button {
+    position: absolute;
+    top: 10px; /* Distância do topo */
+    left: 10px; /* Distância da borda direita */
+    font-size: 1.5rem;
+    z-index: 10; /* Garante que a seta fique acima do logo */
+}
+
+.cardapio-back-button a {
+    color: inherit;
+}
+
+/* 1º Container: Logo e botão de voltar */
+.cardapio-back-button, .pedido-back-button {
+    text-align: left;
+}
+
+.cardapio-back-button a, .pedido-back-button a {
+    color: #0077cc;
+    font-size: 1.5rem;
+    text-decoration: none;
+}
+
+.cardapio-info-section {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start; /* Alinha à esquerda */
+    margin-top: 10px;
+}
+
+/* Posiciona o container no canto esquerdo */
+.cardapio-info-cardapio {
+    line-height: 0.8;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinha à esquerda */
+    margin-left: 10px; /* Ajuste a margem conforme necessário */
+}
+
+/* Cada item da lista */
+.info-item {
+    margin-bottom: 2px;
+    display: flex;
+    align-items: center; /* Garante que os elementos fiquem na mesma linha */
+    /*gap: 8px; /* Espaço entre o ícone e o texto */
+}
+
+/* Ajusta o tamanho dos ícones */
+.info-item i {
+    font-size: 14px; /* Ajuste conforme necessário */
+    width: 20px; /* Mantém um espaço fixo para os ícones */
+    text-align: center;
+}
+
+/* Ajusta o tamanho da fonte do texto */
+.info-item span {
+    font-size: 0.9rem;
+    margin-left: 10px;
+    white-space: nowrap; /* Evita quebra de linha */
+}
+
+/* Cores personalizadas */
+.fab.fa-whatsapp { color: #25D366; }
+.fas.fa-clock { color: #606060; }
+.fas.fa-motorcycle { color: #FF5733; }
+
+
+/* 3º Container: Seção do produto */
+.cardapio-produto-card {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 5px;
+    gap: 10px;
+}
+
+.cardapio-product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.erro-carregamento, .sem-produtos {
+    text-align: center;
+    padding: 20px;
+    color: #d9534f;
+}
+.erro-carregamento i, .sem-produtos i {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.product-details {
+    padding: 5px;
+    text-align: left;
+    background-color: rgb(227, 227, 227);
+}
+
+
+span.descricao-produto {
+    font-size: 1rem;
+    font-weight: 600;
+    display: block;
+    margin: 5px 5px;
+    color: #444;
+    letter-spacing: 0.5px;
+}
+
+/* Mantemos o estilo original da descrição separado */
+.cardapio-product-descricao {
+    font-size: 0.95rem;
+    color: #555;
+    text-align: justify;
+    line-height: 1.4;
+    margin-top: 10px;
+    font-weight: 400; /* Garante que não herde o peso do span */
+}
+
+
+
+.cardapio-product-titulo {
+    display: flex;
+    justify-content: space-between; /* Separa os elementos à esquerda e à direita */
+    align-items: center; /* Alinha verticalmente */
+    width: 100%; /* Ocupa toda a largura disponível */
+}
+
+.cardapio-product-nome, .cardapio-product-ml {
+    margin: 0; /* Remove margens indesejadas */
+}
+
+.cardapio-product-nome {
+    font-size: 1rem; /* Tamanho da fonte */
+}
+
+.cardapio-section-divider {
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, #ddd, #999, #ddd);
+    margin: 10px 0;
+    border-radius: 2px;
+}
+
+.cardapio-header {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100px; /* ajuste conforme seu layout */
+    
+}
+
+.faixa-header {
+    background-color: #dadada;
+    border-radius: 5px;
+    height: 30px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    margin-bottom: 5px;
+}
+
+.cardapio-main-title {
+    font-family: 'Pacifico', cursive;
+    background: linear-gradient(90deg, #444, #626262, #444); /* gradiente suave */
+    color: #fff;
+    padding: 5px 10px;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 1,2rem;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    width: 50%;
+    max-width: 800px;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
+}
+
+
+
+.product-header {
+    width: 100%; /* Ocupa toda a largura disponível */
+
+}
+
+.faixa-header {
+    height: 26px;
+    padding: 0 8px;
+}
+
+.cardapio-product-nome {
+    margin-right: 10px; /* Reduz o espaçamento entre o nome e o ml */
+}
+
+.cardapio-product-ml {
+    margin-right: auto;
+    font-size: 1rem;
+    color: #777;
+}
+
+.cardapio-product-preco, .cardapio-product-valor {
+    font-size: 1.2rem;
+    color: red;
+    font-weight: bold;
+}
+
+
+.cardapio-product-descricao {
+    font-size: 1rem;
+    color: #555;
+    text-align: justify; /* Alinha o texto justificado */
+    line-height: 1; /* Espaçamento entre as linhas */
+    margin-top: 0; /* Espaçamento acima da descrição */
+}
+
+/* 4º Container: Porções adicionais */
+.cardapio-acrescimos-section {
+    text-align: left;
+}
+
+.cardapio-subtitulo-destaque {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.cardapio-obrigatorio, .cardapio-opcao {
+    font-size: 0.9rem;
+    color: #ff0000;
+}
+
+.cardapio-acrescimos-lista {
+    list-style: none;
+    padding: 0;
+}
+
+.cardapio-acrescimos-lista li {
+    margin: 10px 0;
+}
+
+.cardapio-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.index-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.cardapio-checkbox-index-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.cardapio-acrescimo-check {
+    display: none;
+}
+
+.cardapio-checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #0077cc;
+    border-radius: 5px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cardapio-checkmark::after {
+    content: "✔";
+    font-size: 14px;
+    color: #0077cc;
+    display: none;
+}
+
+.cardapio-acrescimo-check:checked + .cardapio-checkmark::after {
+    display: block;
+}
+
+.cardapio-preco-acrescimo {
+    color: #0077cc;
+    font-weight: bold;
+}
+
+/* 5º Container: Escolha do creme */
+.cardapio-creme-section {
+    text-align: left;
+}
+
+.cardapio-creme-select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #0077cc;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+    margin-top: 10px;
+}
+
+/* 6º Container: Observações */
+.cardapio-observacoes-section {
+    text-align: left;
+}
+
+.cardapio-observacoes-textarea {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #0077cc;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: #333;
+    resize: vertical;
+}
+
+/* 7º Container: Controle de quantidade e preço */
+.cardapio-pedido-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+}
+
+.cardapio-quantity-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cardapio-qtd-number {
+    font-size: 1.2rem;
+    color: #333;
+}
+
+
+/* Responsividade para mobile */
+@media (max-width: 768px) {
+    .cardapio-index-container, .pedido-index-container {
+        padding: 10px;
+    }
+
+    .info-item i {
+        font-size: 1rem;
+    }
+
+    .info-item span {
+        font-size: 0.9rem;
+    }
+
+    .cardapio-product-image {
+        height: 150px;
+    }
+
+    .cardapio-pedido-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .cardapio-header {
+        height: 90px;
+        padding: 0 15px;
+        margin-bottom: 20px;
+    }
+
+
+
+    .cardapio-main-title {
+        font-size: 0.9rem;
+        padding: 8px 20px;
+        letter-spacing: 2px;
+    }
+}
+
+/* ============= PAGINA pedido.html ============= */
+
+/* Estilo geral do resumo */
+.pedido-resumo {
+    font-size: 0.8rem; /* Tamanho da fonte */
+    line-height: 1.4; /* Espaçamento entre linhas */
+    margin: 20px 0;
+}
+
+.pedido-resumo ul {
+    list-style-type: none; /* Remove os marcadores da lista */
+    padding: 0;
+    margin: 0;
+}
+
+.pedido-resumo li {
+    display: flex; /* Usa flexbox para alinhar os itens */
+    justify-content: space-between; /* Alinha o título e o valor */
+    padding: 5px 0;
+    border-bottom: 1px solid #ddd; /* Linha separadora */
+}
+
+.pedido-resumo li span:first-child {
+    font-weight: bold; /* Deixa o título em negrito */
+}
+
+.pedido-resumo li span:last-child {
+    text-align: right; /* Alinha o valor à direita */
+}
+
+/* Destacar o Valor Total e R$ */
+.pedido-resumo li span.valor-total {
+    font-size: 14px; /* Aumenta o tamanho da fonte */
+    font-weight: 700; /* Deixa em negrito */
+    color: #090909; 
+}
+
+/* Estilo para ambos os previews */
+.img-preview {
+    max-width: 100px;
+    max-height: 100px;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    object-fit: contain;
+    background: #f5f5f5 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23ccc"><text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="10">Sem imagem</text></svg>') no-repeat center;
+  }
+
+/* Texto de instruções */
+.form-text {
+  display: block;
+  margin-top: 5px;
+  color: #6c757d;
+  font-size: 0.8em;
+}
+
+/* Destaque durante upload */
+.uploading {
+  opacity: 0.7;
+  position: relative;
+}
+.uploading::after {
+  content: "Processando...";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  background: rgba(0,0,0,0.7);
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+/* Títulos com fundo */
+h3, h4 {
+    background-color: #D3D3D3;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    
+}
+
+/* Formulários */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Grupo de campos */
+.form-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+
+
+
+/* Campos de entrada */
+.input-group {
+    position: relative;
+    flex: 1;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    transition: 0.3s;
+    background: white;
+    padding-right: 35px;
+}
+
+/* Labels flutuantes */
+.input-group label {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: all 0.3s ease;
+    pointer-events: none;
+    background: white;
+    padding: 0 5px;
+    color: #999;
+    z-index: 1; /* Garante que a label fique acima do input */
+}
+
+.input-group label.floating {
+    top: 1px; /* Ajuste fino na posição */
+    transform: translateY(0);
+    font-size: 12px;
+    color: #666;
+    z-index: 2; /* Mantém acima mesmo durante animação */
+}
+
+
+.input-group input:focus + label,
+.input-group input:not(:placeholder-shown) + label {
+    top: 1px;
+    font-size: 12px;
+    color: #007bff;
+}
+
+/* Estilo para o ícone de busca */
+.pedido-cep-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px; /* Tamanho do ícone */
+    color: #007bff; /* Cor inicial */
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+}
+
+/* Efeito ao passar o mouse */
+.pedido-cep-icon:hover {
+    color: #0056b3;
+    transform: scale(1.2); /* Aumenta ligeiramente */
+    text-shadow: 0px 0px 10px rgba(122, 154, 236, 0.8); /* Brilho sutil */
+}
+
+/* Animação de pulso ao clicar */
+.pedido-cep-icon:active {
+    color: #070093;
+    animation: pulse 0.3s ease-in-out;
+    transition: 0.1s;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+
+
+.pedido-aviso-container {
+    display: relative;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+#campo-obrigatorio-aviso {
+    font-size: 0.8rem;
+    color: red;
+    font-weight: bold;
+    text-align: left; /* Texto alinhado à esquerda */
+    margin-bottom: 10px;
+    margin-left: 10px; /* Adiciona uma margem à esquerda, caso necessário */
+}
+
+
+/* Container do botão, ocupa 100% */
+.pedido-enviar-btn {
+    width: 100%; /* Faz o botão ocupar toda a largura */
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .cep-group {
+        flex-direction: column;
+    }
+
+    .logradouro-group, .localidade-group {
+        flex-direction: column;
+    }
+
+    .pedido-enviar-btn {
+        font-size: 1rem;
+    }
+    .pedido-resumo {
+        font-size: 10px; /* Tamanho menor em telas pequenas */
+    }
+
+    .pedido-resumo li span.valor-total {
+        font-size: 12px; /* Ajusta o tamanho no mobile */
+    }
+
+    .payment-group {
+        max-width: 100%;
+        padding: 0 10px;
+    }
+
+    .payment-option {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    /* Responsividade para mobile (ATUALIZADO) */
+
+    
+    #logoLoja { /* Seleciona o logo pelo ID */
+        width: 100px; /* Reduz o tamanho para mobile */
+        height: 100px;
+        max-width: 120px; /* Garante que não ultrapasse */
+        margin: 30px; /* Centraliza e ajusta espaçamento */
+    }
+
+    /* Mantido o restante original */
+    .index-btn-cardapio, .index-btn-whatsapp {
+        width: 100%;
+    }
+
+    .index-instagram-link {
+        bottom: 80px;
+    }
+
+
+
+    /* Ajuste fino na imagem do produto */
+    .cardapio-product-image {
+        height: 180px; /* Altura mais compacta */
+    }
+
+
+/* Adicionando breakpoint extra para telas muito pequenas */
+@media (max-width: 480px) {
+    #logoLoja {
+        max-width: 100px; /* Tamanho ainda menor */
+        width: 100px;
+        height: 100px;
+    }
+    
+    .cardapio-product-image {
+        height: 150px; /* Altura reduzida */
+    }
+
+    .cardapio-main-title {
+        font-size: 0.9rem;
+        padding: 6px 16px;
+    
+    }
+
+    .cardapio-header {
+        margin-bottom: 15px;
+    }
+}
+
+}
+
+/* ============= AREA DO PIX =============== */
+
+
+
+.pix-qrcode {
+    max-width: 250px;
+    margin: 15px auto;
+    border: 2px solid #000;
+    padding: 10px;
+}
+
+.pix-code code {
+    word-break: break-all;
+    background: #f8f9fa;
+    padding: 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+}
+
+.pix-expire {
+    color: #dc3545;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.copy-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    width: 100%;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.copy-btn:hover {
+    background-color: #2980b9;
+}
+
+.timer {
+    font-size: 24px;
+    font-weight: bold;
+    color: #e74c3c;
+    margin: 10px 0;
+    text-align: center;
+}
+
+.payment-info {
+    margin: 15px 0;
+    text-align: center;
+}
+
+.info-item {
+    margin: 8px 0;
+    font-size: 16px;
+}
+
+.info-label {
+    font-weight: bold;
+    color: #555;
+}

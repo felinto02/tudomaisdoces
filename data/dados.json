@@ -1,0 +1,69 @@
+{
+  "pagamento": {
+    "pix": {
+      "nomeRecebedor": "Merlin Caribe Stiegelmeier",
+      "chavePix": "01984938274",
+      "email": "merlincaribe@gmail.com",
+      "cidade": "PORTO VELHO"
+    }
+  },
+  "adminCredentials": {
+    "username": "admin",
+    "password": "1234"
+  },
+  "configLoja": {
+    "logoPath": "/uploads/logos/logo.jpg",
+    "horarioAbertura": "07:00",
+    "horarioFechamento": "12:00",
+    "instagram": "@tudomaisdoce96",
+    "instagramLink": ""
+  },
+  "contato": {
+    "telefone": "(69) 99222-2172",
+    "tempoEntrega": 40,
+    "taxaEntrega": 8
+  },
+  "produtos": [
+    {
+      "id": "910b40b3-b4d4-4222-971b-ecc2e2af55c9",
+      "nome": "Salada de Frutas",
+      "tamanho": "500ml",
+      "preco": 20,
+      "imagePath": "/uploads/produtos/salada.jpeg",
+      "descricao": "A salada de frutas é uma sobremesa fresca e saudável, composta por uma variedade de frutas picadas, geralmente misturadas com algum tipo de creme ou suco."
+    }
+  ],
+  "porcoes": [
+    {
+      "nome": "Morango",
+      "preco": 3.5
+    },
+    {
+      "nome": "Kiwi",
+      "preco": 4
+    },
+    {
+      "nome": "Leite Condensado",
+      "preco": 3
+    },
+    {
+      "nome": "Leite em Pó",
+      "preco": 3
+    }
+  ],
+  "cremes": [
+    {
+      "id": "1",
+      "nome": "Nutella"
+    },
+    {
+      "id": "2",
+      "nome": "Chocolate Belga"
+    },
+    {
+      "id": "3",
+      "nome": "Maracujá"
+    }
+  ]
+
+}
