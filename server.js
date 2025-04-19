@@ -5,7 +5,8 @@ const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
 const app = express();
-const port = 3000;
+const PORT = process.env.PORT || 3000;
+
 // Configuração correta do rate limiting
 const rateLimit = require('express-rate-limit');
 const limiter = rateLimit({
@@ -14,6 +15,10 @@ const limiter = rateLimit({
 });
 
 const dadosPath = path.join(__dirname, 'data', 'dados.json');
+
+
+app.set('trust proxy', 1); // Ou true, mas 1 é mais seguro pra ambientes como Render
+
 
 // Middleware para permitir JSON no body das requisições
 app.use(express.json());
@@ -170,7 +175,11 @@ const storage = multer.diskStorage({
     if (file.fieldname === 'logoLoja') folder = 'logos';
     
     const dir = path.join(__dirname, 'public', 'uploads', folder);
-    fs.mkdir(dir, { recursive: true }, (err) => cb(err, dir));
+
+    fs.mkdir(dir, { recursive: true })
+      .then(() => cb(null, dir))
+      .catch(err => cb(err, dir));
+
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -410,10 +419,7 @@ app.get('/api/pix-config', async (req, res) => {
 });
 
 // ========== INICIALIZAÇÃO DO SERVIDOR ==========
-createUploadDirs().then(() => {
-  app.listen(port, () => {
-    console.log(`Servidor rodando em http://localhost:${port}`);
-    console.log(`Acesse o painel admin em http://localhost:${port}/index.html`);
-  });
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
 
