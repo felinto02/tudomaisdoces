@@ -36,6 +36,6 @@
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/tudomaisdoce.git
+   git clone https://github.com/felinto12/tudomaisdoce.git
 
 
