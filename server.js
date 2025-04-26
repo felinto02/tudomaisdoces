@@ -430,7 +430,7 @@ const initWhatsAppClient = () => {
   venom.create({
     session: 'whatsapp-sender',
     multidevice: true,
-    headless: false,
+    headless: true,
     disableSpins: true,
     logQR: true
   })
