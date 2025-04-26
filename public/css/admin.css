@@ -285,12 +285,12 @@ body {
     resize: vertical;
 }
 
-.time-inputs {
+.timer-inputs {
     display: flex;
     gap: 10px;
 }
 
-.time-inputs input {
+.timer-inputs input {
     flex: 1;
 }
 
@@ -638,6 +638,40 @@ button,
     box-sizing: border-box;
 }
 
+/* Modal do WhatsApp */
+#whatsapp-qr-modal .admin-modal-content {
+    max-width: 500px;
+    text-align: center;
+  }
+  
+  #qr-code-container {
+    margin: 20px 0;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .admin-instructions {
+    text-align: left;
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+  }
+  
+  .admin-instructions ol {
+    padding-left: 20px;
+  }
+  
+  #whatsapp-status {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #e9ecef;
+  }
+  /*-- FIM -- */
+
 .admin-modal-content {
     position: relative;
     background-color: white;
@@ -758,7 +792,7 @@ button,
         padding: 15px;
     }
     
-    .time-inputs {
+    .timer-inputs {
         flex-direction: column;
     }
     

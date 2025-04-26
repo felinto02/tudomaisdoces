@@ -14,14 +14,14 @@
   "configLoja": {
     "logoPath": "/uploads/logos/logo.jpg",
     "horarioAbertura": "07:00",
-    "horarioFechamento": "12:00",
+    "horarioFechamento": "18:00",
     "instagram": "@tudomaisdoce96",
     "instagramLink": ""
   },
   "contato": {
-    "telefone": "(69) 99222-2172",
-    "tempoEntrega": 40,
-    "taxaEntrega": 8
+    "telefone": "5569992418676",
+    "tempoEntrega": "40",
+    "taxaEntrega": 10
   },
   "produtos": [
     {
@@ -65,5 +65,4 @@
       "nome": "Maracujá"
     }
   ]
-
 }

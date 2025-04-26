@@ -268,6 +268,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const carregarDados = async () => {
         try {
             const response = await fetch('/api/admin/dados'); 
+            
             if (!response.ok) {
                 const error = await response.text();
                 throw new Error(error || `Erro ${response.status}`);
@@ -291,12 +292,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // ========== INFORMAÇÕES DE CONTATO ==========
             const contato = dados.contato || {};
-            document.getElementById('admin-telefone').value = contato.telefone || '';
+
+            // Remove o DDI (55) e formata o telefone para exibição
+            const telefoneBruto = contato.telefone ? contato.telefone.replace(/^55/, '') : '';
+            document.getElementById('admin-telefone').value = telefoneBruto;
+
+            // Aplica a máscara apenas se houver valor
+            if (telefoneBruto) {
+                mascaraTelefone({ target: document.getElementById('admin-telefone') });
+            }
+
             document.getElementById('admin-tempo-entrega').value = contato.tempoEntrega || '';
             document.getElementById('admin-taxa-entrega').value = contato.taxaEntrega ? 
                 contato.taxaEntrega.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) : '';
-
-            
+                        
             // ========== PRODUTOS ==========
             const produtos = dados.produtos || [];
             preencherLista('produtos-list', produtos, criarItemProduto);
@@ -584,7 +593,7 @@ async function salvarProduto(event) {
             icon: data.success ? 'success' : 'error',
             title: data.success ? 'Salvo!' : 'Erro!',
             text: data.message,
-            time: 2000,
+            timer: 2000,
             showConfirmButton: false
         })
 
@@ -593,7 +602,7 @@ async function salvarProduto(event) {
             icon: 'error',
             title: 'Erro',
             text: 'Falha ao salvar o produto',
-            time: 2000
+            timer: 2000
         })
     }
 }
@@ -604,13 +613,22 @@ async function salvarContato(event) {
 
 
     try {
+
+        // Converter telefone para formato internacional (55 + DDD + número)
+        const telefoneBruto = document.getElementById('admin-telefone').value.replace(/\D/g, '');
+        const telefoneInternacional = `55${telefoneBruto}`; // Adiciona o DDI 55 automaticamente
+
+        // Converter taxa para número
+        const taxa = document.getElementById('admin-taxa-entrega').value;
+        const taxaNumerica = parseFloat(taxa.replace(/[^0-9,]/g, '').replace(',', '.'));
+
         const response = await fetch('/api/admin/salvar-contato', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                telefone: document.getElementById('admin-telefone').value,
+                telefone: telefoneInternacional, //Formato: 55xxxxxxx
                 tempoEntrega: document.getElementById('admin-tempo-entrega').value,
-                taxaEntrega: document.getElementById('admin-taxa-entrega').value
+                taxaEntrega: taxaNumerica // Envia o número
             })
         });
 
@@ -620,7 +638,7 @@ async function salvarContato(event) {
             icon: data.success ? 'success' : 'error',
             title: data.success ? 'Sucesso' : 'Erro!',
             text: data.message,
-            time: 2000,
+            timer: 2000,
             showConfirmButton: false
         })
 
@@ -630,7 +648,7 @@ async function salvarContato(event) {
             icon: 'error',
             title: 'Erro',
             text: 'Falha na conexão com o servidor!',
-            time: 2000
+            timer: 2000
         })
     }
 }
@@ -689,15 +707,17 @@ async function uploadImagem(fileInputId, apiEndpoint, previewElementId) {
 
   // Função para máscara de telefone
   function mascaraTelefone(input) {
-    let valor = input.value.replace(/\D/g, '');
+    const inputElement = input.target ? input.target : input; // Compatível com chamada manual
+    let valor = inputElement.value ? inputElement.value.replace(/\D/g, '') : '';
+    
     if (valor.length <= 2) {
-      input.value = `(${valor}`;
+        inputElement.value = `(${valor}`;
     } else if (valor.length <= 7) {
-      input.value = `(${valor.slice(0, 2)}) ${valor.slice(2)}`;
+        inputElement.value = `(${valor.slice(0, 2)}) ${valor.slice(2)}`;
     } else {
-      input.value = `(${valor.slice(0, 2)}) ${valor.slice(2, 7)}-${valor.slice(7, 11)}`;
+        inputElement.value = `(${valor.slice(0, 2)}) ${valor.slice(2, 7)}-${valor.slice(7, 11)}`;
     }
-  }
+}
 
  
   

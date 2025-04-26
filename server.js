@@ -2,10 +2,25 @@ const express = require('express');
 const fs = require('fs').promises;
 //const bodyParser = require('bosy-parser')
 const multer = require('multer');
+const venom = require('venom-bot');
 const path = require('path');
 const cors = require('cors');
+const http = require('http');
+const socketIo = require('socket.io');
+
 const app = express();
-const port = 3000;
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: {
+    origin: "https://tudomaisdoce.onrender.com",
+    methods: ["GET", "POST"]
+  }
+});
+
+const PORT = process.env.PORT || 3000;
+
+
+
 // Configuração correta do rate limiting
 const rateLimit = require('express-rate-limit');
 const limiter = rateLimit({
@@ -14,6 +29,10 @@ const limiter = rateLimit({
 });
 
 const dadosPath = path.join(__dirname, 'data', 'dados.json');
+
+
+app.set('trust proxy', 1); // Ou true, mas 1 é mais seguro pra ambientes como Render
+
 
 // Middleware para permitir JSON no body das requisições
 app.use(express.json());
@@ -170,7 +189,11 @@ const storage = multer.diskStorage({
     if (file.fieldname === 'logoLoja') folder = 'logos';
     
     const dir = path.join(__dirname, 'public', 'uploads', folder);
-    fs.mkdir(dir, { recursive: true }, (err) => cb(err, dir));
+
+    fs.mkdir(dir, { recursive: true })
+      .then(() => cb(null, dir))
+      .catch(err => cb(err, dir));
+
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -409,11 +432,106 @@ app.get('/api/pix-config', async (req, res) => {
   }
 });
 
-// ========== INICIALIZAÇÃO DO SERVIDOR ==========
-createUploadDirs().then(() => {
-  app.listen(port, () => {
-    console.log(`Servidor rodando em http://localhost:${port}`);
-    console.log(`Acesse o painel admin em http://localhost:${port}/index.html`);
+
+// ========== INTEGRAÇÃO DO WHATSAPP ==========
+let whatsappClient;
+let qrCodeData = null;
+
+// Função para inicializar o cliente do WhatsApp
+const initWhatsAppClient = () => {
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  venom.create({
+    session: 'whatsapp-sender',
+    multidevice: true,
+    headless: isProduction,
+    disableSpins: true,
+    logQR: false, // Não mostrar no console
+    puppeteerOptions: { 
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
+    },
+    statusFind: (statusSession) => {
+      console.log('Status:', statusSession);
+    },
+    onLoadingScreen: (percent, message) => {
+      console.log(`Carregando: ${percent}% - ${message}`);
+    },
+    catchQR: (base64Qrimg, asciiQR) => {
+      qrCodeData = base64Qrimg; // Armazena o QR Code em base64
+      
+      // Envia o QR Code para todos clientes admin conectados via Socket.IO
+      if (io) {
+        io.emit('whatsapp-qr', { qr: base64Qrimg });
+      }
+    }
+  })
+  .then((client) => {
+    whatsappClient = client;
+    console.log('Cliente WhatsApp inicializado com sucesso!');
+    if (io) io.emit('whatsapp-status',{ status: 'connected'});
+  })
+  .catch((error) => {
+    console.error('Erro ao inicializar cliente WhatsApp:', error);
+    if (io) io.emit('whatsapp-status', { status: 'error', error: error.message });
   });
+};
+
+// Rota para enviar mensagem via WhatsApp
+app.post('/api/send-whatsapp', async (req, res) => {
+  try {
+    const { message } = req.body;
+
+    // Ler o número de telefone do dados.json
+    const data = await fs.readFile(dadosPath, 'utf8');
+    const dados = JSON.parse(data);
+    
+    if (!dados.contato || !dados.contato.telefone) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Número de telefone não configurado no sistema' 
+      });
+    }
+
+    const phoneNumber = dados.contato.telefone.replace(/\D/g, '') + '@c.us';
+
+    if (!whatsappClient) {
+      return res.status(500).json({ 
+        success: false, 
+        message: 'Cliente WhatsApp não está conectado' 
+      });
+    }
+
+    await whatsappClient.sendText(phoneNumber, message);
+    
+    res.json({ 
+      success: true, 
+      message: 'Mensagem enviada com sucesso via WhatsApp!' 
+    });
+  } catch (error) {
+    console.error('Erro ao enviar mensagem WhatsApp:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Falha ao enviar mensagem WhatsApp',
+      error: error.message 
+    });
+  }
 });
 
+// Modifique a inicialização do servidor para incluir o WhatsApp
+const startServer = async () => {
+  await createUploadDirs();
+  
+  // Inicializa o cliente WhatsApp
+  initWhatsAppClient();
+
+
+// ========== INICIALIZAÇÃO DO SERVIDOR ==========
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
+
+};
+// Inicie o servidor
+startServer().catch(err => {
+  console.error('Falha ao iniciar o servidor:', err);
+});

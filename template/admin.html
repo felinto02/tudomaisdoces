@@ -91,6 +91,12 @@
                     <span>Alterar Credenciais</span>
                 </a>
             </li>
+            <li class="admin-sidebar-item" id="whatsapp-qr-item">
+                <a href="#" class="admin-sidebar-link" id="btn-whatsapp-qr">
+                    <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                    <span>WhatsApp QR Code</span>
+                </a>
+            </li>
         </ul>
     </aside>
 
@@ -98,7 +104,7 @@
     <div id="admin-loginModal" class="admin-modal">
         <div class="admin-modal-content">
             <button class="admin-modal-close" onclick="fecharLoginModal()" aria-label="Fechar modal">
-                <i class="fas fa-times"></i>
+                <i class="fas fa-timers"></i>
             </button>
             <h4>Login do Administrador</h4>
             <form id="admin-loginForm" aria-label="Formulário de login">
@@ -131,7 +137,7 @@
     <div id="admin-recoveryRequestModal" class="admin-modal">
         <div class="admin-modal-content">
             <button class="admin-modal-close" onclick="fecharRecoveryRequestModal()" aria-label="Fechar modal">
-                <i class="fas fa-times"></i>
+                <i class="fas fa-timers"></i>
             </button>
             <h4>Recuperação de Senha</h4>
             <form id="admin-recoveryRequestForm" aria-label="Formulário de recuperação de senha">
@@ -151,7 +157,7 @@
     <div id="admin-passwordResetModal" class="admin-modal">
         <div class="admin-modal-content">
             <button class="admin-modal-close" onclick="fecharPasswordResetModal()" aria-label="Fechar modal">
-                <i class="fas fa-times"></i>
+                <i class="fas fa-timers"></i>
             </button>
             <h4>Criar Nova Senha</h4>
             <form id="admin-passwordResetForm" aria-label="Formulário de nova senha">
@@ -224,9 +230,9 @@
                 <form id="admin-form-loja">
                     <div class="admin-form-group">
                         <label for="admin-horario-abertura">Horário de Funcionamento:</label>
-                        <div class="time-inputs">
-                            <input type="time" id="admin-horario-abertura" name="admin-horario-abertura">
-                            <input type="time" id="admin-horario-fechamento" name="admin-horario-fechamento">
+                        <div class="timer-inputs">
+                            <input type="timer" id="admin-horario-abertura" name="admin-horario-abertura">
+                            <input type="timer" id="admin-horario-fechamento" name="admin-horario-fechamento">
                         </div>
                     </div>
                     <div class="admin-form-group">
@@ -261,7 +267,7 @@
             <!-- Seção de Informações de Contato -->
             <section id="contato" class="admin-section" aria-labelledby="contato-title">
                 <h2 id="contato-title"><i class="fas fa-phone-alt" aria-hidden="true"></i> Informações de Contato</h2>
-                <form id="admin-form-contato">
+                <form id="admin-form-contato"  class="admin-section" aria-labelledby="contato-title" onsubmit="salvarContato(event)">
                     <div class="admin-form-group">
                         <label for="admin-telefone">Número de Telefone:</label>
                         <input type="tel" id="admin-telefone" name="admin-telefone" maxlength="15" placeholder="(00) 90000-0000"
@@ -429,6 +435,27 @@
             </form>
             <p id="alterarSenhaMensagem" class="admin-error-message" role="alert"></p>
 
+        </div>
+    </div>
+    <!-- Modal do QR Code WhatsApp -->
+    <div id="whatsapp-qr-modal" class="admin-modal" style="display: none;">
+        <div class="admin-modal-content">
+            <button class="admin-modal-close" onclick="fecharWhatsappModal()" aria-label="Fechar modal">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2>Conectar WhatsApp</h2>
+            <div id="qr-code-container">
+                <p>Carregando QR Code...</p>
+            </div>
+            <div class="admin-instructions">
+                <p><strong>Como conectar:</strong></p>
+                <ol>
+                    <li>Abra o WhatsApp no seu celular</li>
+                    <li>Toque em <strong>Menu → Dispositivos vinculados</strong></li>
+                    <li>Aponte a câmera para o QR Code acima</li>
+                </ol>
+                <p id="whatsapp-status">Status: Aguardando conexão...</p>
+            </div>
         </div>
     </div>
 
