@@ -285,12 +285,12 @@ body {
     resize: vertical;
 }
 
-.time-inputs {
+.timer-inputs {
     display: flex;
     gap: 10px;
 }
 
-.time-inputs input {
+.timer-inputs input {
     flex: 1;
 }
 
@@ -758,7 +758,7 @@ button,
         padding: 15px;
     }
     
-    .time-inputs {
+    .timer-inputs {
         flex-direction: column;
     }
     

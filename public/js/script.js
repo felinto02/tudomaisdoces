@@ -41,8 +41,8 @@ function atualizarStatusLoja(config) {
 
     if (!statusDiv || !statusTexto || !config) return;
 
-    const abertura = timeToMinutes(config.horarioAbertura);   // "08:00"
-    const fechamento = timeToMinutes(config.horarioFechamento); // "18:00"
+    const abertura = timerToMinutes(config.horarioAbertura);   // "08:00"
+    const fechamento = timerToMinutes(config.horarioFechamento); // "18:00"
 
     if (atualEmMinutos >= abertura && atualEmMinutos < fechamento) {
         statusDiv.classList.remove('offline');
@@ -55,8 +55,8 @@ function atualizarStatusLoja(config) {
     }
 
     // Conversão de hora para minutos
-    function timeToMinutes(time) {
-        const [h, m] = time.split(':').map(Number);
+    function timerToMinutes(timer) {
+        const [h, m] = timer.split(':').map(Number);
         return h * 60 + m;
     }
 }

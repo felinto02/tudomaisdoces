@@ -30,7 +30,7 @@ function gerarPayloadPix({ chave, nome, cidade, valor, txid = '***' }) {
 
     const crc = calcularCRC(payloadSemCRC);
     return payloadSemCRC + crc;
-}
+    }
 
 function calcularCRC(payload) {
     let polinomio = 0x1021;
@@ -77,14 +77,15 @@ async function carregarDadosPix() {
 }
 
 
+// Modifique a função mostrarModalPix para retornar uma Promise
 async function mostrarModalPix(valorFinal, payloadPix) {
     const qrCodeDataUrl = await QRCode.toDataURL(payloadPix);
 
-    Swal.fire({
+    return Swal.fire({
         title: 'Pagamento via PIX',
         html: `
             <p style="margin-bottom: 10px;"><strong>Valor:</strong> ${new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valorFinal)}</p>
-            <p >Escaneie o QR Code abaixo para realizar o pagamento:</p>            
+            <p>Escaneie o QR Code abaixo para realizar o pagamento:</p>            
             <img src="${qrCodeDataUrl}" alt="QR Code PIX" style="width: 200px; margin: 10px 0;" /> 
             <p><strong>Ou copie e cole o código abaixo:</strong></p>
             <div style="display: flex; gap: 5px; align-items: center;">
@@ -365,116 +366,164 @@ function limparCamposEndereco() {
 
 
 // ========== MENSAGEM DE CAMPOS OBRIGATORIOS E BOTÃO ================//
-document.getElementById('pedido-btn').addEventListener('click', function(event) {
-    event.preventDefault();  // Previne o envio do formulário para validar antes
+document.getElementById('pedido-btn').addEventListener('click', async function(event) {
+    event.preventDefault();
     
-    // Lista de campos obrigatórios
+    // Validação de campos
     const camposObrigatorios = [
-        'pedido-cep', 'pedido-logradouro', 'pedido-numero', 'pedido-bairro', 'pedido-cidade', 'pedido-uf',
+        'pedido-cep', 'pedido-logradouro', 'pedido-numero', 
+        'pedido-bairro', 'pedido-cidade', 'pedido-uf',
         'pedido-nome', 'pedido-telefone'
     ];
     
-    let todosPreenchidos = true;
-
-    for (let campo of camposObrigatorios) {
+    let todosPreenchidos = camposObrigatorios.every(campo => {
         const input = document.getElementById(campo);
-        if (!input.value.trim()) {
-            todosPreenchidos = false;
-            break;
-        }
-    }
+        return input.value.trim();
+    });
 
-    // Validação específica do telefone
+    // Validação do telefone
     const telefoneInput = document.getElementById('pedido-telefone');
-    const telefoneNumerico = telefoneInput.value.replace(/\D/g, ''); // Remove tudo que não for número
-    if (telefoneNumerico.length !== 11) {
-        todosPreenchidos = false;
-    }
+    const telefoneNumerico = telefoneInput.value.replace(/\D/g, '');
+    todosPreenchidos = todosPreenchidos && telefoneNumerico.length === 11;
 
     if (!todosPreenchidos) {
-        // Alerta de erro caso falte algum campo ou telefone esteja incompleto
         Swal.fire({
             icon: 'error',
             title: 'Erro!',
-            text: 'Todos os campos são obrigatórios!',
+            text: 'Preencha todos os campos corretamente!',
             confirmButtonText: 'OK'
         });
-    } else {
-        // Alerta de confirmação caso todos os campos estejam preenchidos corretamente
-        Swal.fire({
-            title: "Deseja realmente fazer o pedido?",
-            text: "Verifique as informações antes de confirmar.",
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#3085d6",
-            cancelButtonColor: "#d33",
-            confirmButtonText: "Sim, confirmar pedido",
-            cancelButtonText: "Cancelar"
-        // No evento de clique do botão de pedido (substitua a parte do .then do Swal.fire)
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                // Carrega dados do PIX do servidor
-                const pixData = await carregarDadosPix();
-                // Obter dados do localStorage e calcular valor total
-                const pedidoStorage = JSON.parse(localStorage.getItem("pedido"));
-                const taxaEntrega = Number(pedidoStorage.taxaEntrega) || 0;
-                const totalAcrescimos = pedidoStorage.acrescimos?.length > 0 
-                    ? pedidoStorage.acrescimos.reduce((total, a) => total + Number(a), 0)
-                    : 0;
-                
-                const subtotal = (Number(pedidoStorage.produto.preco) * pedidoStorage.quantidade) + totalAcrescimos;
-                const totalFinal = subtotal + taxaEntrega;
-
-                // Capturar dados do formulário
-                const pedido = {
-                    ...pedidoStorage,
-                    endereco: {
-                        cep: document.getElementById('pedido-cep').value,
-                        logradouro: document.getElementById('pedido-logradouro').value,
-                        numero: document.getElementById('pedido-numero').value,
-                        bairro: document.getElementById('pedido-bairro').value,
-                        cidade: document.getElementById('pedido-cidade').value,
-                        uf: document.getElementById('pedido-uf').value,
-                        complemento: document.getElementById('pedido-complemento').value
-                    },
-                    cliente: {
-                        nome: document.getElementById('pedido-nome').value,
-                        telefone: document.getElementById('pedido-telefone').value
-                    },
-                    total: totalFinal
-                };
-
-                // Salva pedido completo no localStorage
-                localStorage.setItem("pedidoFinal", JSON.stringify(pedido));
-                // Adicionar após confirmação bem-sucedida
-                localStorage.removeItem('cardapioState'); 
-                localStorage.removeItem('pedido');
-                try {
-                    const payloadPix = gerarPayloadPix({
-                        chave: pixData.chave,
-                        nome: pixData.nome,
-                        cidade: "PORTO VELHO",
-                        valor: totalFinal
-                    });
-                
-                    await mostrarModalPix(totalFinal, payloadPix);
-
-                    // Limpar storage
-                    localStorage.removeItem('cardapioState');
-                    localStorage.removeItem('pedido');
-                    
-                } catch (error) {
-                    console.error("Erro ao processar pagamento PIX:", error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Erro no processamento',
-                        text: 'Não foi possível gerar o QR Code PIX. Por favor, tente novamente.'
-                    });
-                }
-            }
-        });
-
+        return;
     }
 
+    // Confirmação do pedido
+    const confirmResult = await Swal.fire({
+        title: "Deseja realmente fazer o pedido?",
+        text: "Verifique as informações antes de confirmar.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sim, confirmar pedido",
+        cancelButtonText: "Cancelar"
+    });
+
+    if (!confirmResult.isConfirmed) return;
+
+    try {
+        // 1. Carrega dados do PIX
+        const pixData = await carregarDadosPix();
+        
+        // 2. Calcula valor total
+        const pedidoStorage = JSON.parse(localStorage.getItem("pedido"));
+        const taxaEntrega = Number(pedidoStorage.taxaEntrega) || 0;
+        const totalAcrescimos = pedidoStorage.acrescimos?.length > 0 
+            ? pedidoStorage.acrescimos.reduce((total, a) => total + Number(a), 0)
+            : 0;
+        
+        const subtotal = (Number(pedidoStorage.produto.preco) * pedidoStorage.quantidade);
+        const totalFinal = subtotal + totalAcrescimos + taxaEntrega;
+
+        // 3. Mostra modal do PIX
+        const payloadPix = gerarPayloadPix({
+            chave: pixData.chave,
+            nome: pixData.nome,
+            cidade: "PORTO VELHO",
+            valor: totalFinal
+        });
+        
+        const pixResult = await mostrarModalPix(totalFinal, payloadPix);
+        
+        // 4. Quando o usuário fecha o modal do PIX, envia o WhatsApp
+        if (pixResult.isDismissed || pixResult.isConfirmed) {
+            await enviarPedidoWhatsApp();
+            
+            // 5. Mostra confirmação final
+            await Swal.fire({
+                icon: 'success',
+                title: 'Pedido Confirmado!',
+                text: 'Seu pedido foi enviado com sucesso!',
+                confirmButtonText: 'OK'
+            });
+            
+            // Limpa o storage
+            localStorage.removeItem('cardapioState');
+            localStorage.removeItem('pedido');
+        }
+    } catch (error) {
+        console.error("Erro no processo:", error);
+        Swal.fire({
+            icon: 'error',
+            title: 'Erro no processamento',
+            text: error.message || 'Ocorreu um erro ao processar seu pedido.'
+        });
+    }
 });
+
+// Função de envio do WhatsApp (fora do event listener)
+async function enviarPedidoWhatsApp() {
+    try {
+        // Gerar Número de pedido único (baseado em timestamp + random
+        const numeroPedido = `PED${Date.now().toString().slice(-6)}${Math.floor(Math.random() * 90 + 10)}`;
+        // Obter dados do formulário
+        const getValue = (id) => {
+            const el = document.getElementById(id);
+            return el ? el.value : '';
+        };
+
+        const nomeCliente = getValue('pedido-nome');
+        const telefoneCliente = getValue('pedido-telefone');
+        const enderecoCompleto = `
+${getValue('pedido-logradouro')}, ${getValue('pedido-numero')}
+${getValue('pedido-complemento') ? 'Complemento: ' + getValue('pedido-complemento') + '\n' : ''}
+Bairro: ${getValue('pedido-bairro')}
+Cidade/UF: ${getValue('pedido-cidade')}/${getValue('pedido-uf')}
+CEP: ${getValue('pedido-cep')}`.replace(/^\s+/gm, '');
+
+        // Obter itens do pedido formatados como tabela
+        const resumoElement = document.getElementById('pedido-resumo-pedido');
+        const itensPedido = resumoElement ? 
+            Array.from(resumoElement.querySelectorAll('li')).map(li => {
+                const [desc, valor] = li.querySelectorAll('span');
+                return `• ${desc.textContent.trim().padEnd(25, ' ')} ${valor.textContent.trim()}`;
+            }).join('\n') : '';
+
+        // Criar mensagem formatada
+        const mensagem = 
+`*🥗 NOVO PEDIDO - ${new Date().toLocaleString()} 🥗*
+
+*👤 CLIENTE #${numeroPedido}*
+Nome:    ${nomeCliente}
+Tel:     ${telefoneCliente}
+
+*🏠 ENDEREÇO*
+${enderecoCompleto}
+
+*📋 DETALHES DO PEDIDO*
+${itensPedido}
+
+*💳 FORMA DE PAGAMENTO*
+PIX (QR Code enviado)
+
+*💰 VALOR TOTAL*
+${document.querySelector('.total-line span:last-child')?.textContent || ''}`;
+
+        // Enviar via API
+        const response = await fetch('/api/send-whatsapp', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: mensagem })
+        });
+
+        if (!response.ok) {
+            throw new Error('Falha no envio pelo WhatsApp');
+        }
+    } catch (error) {
+        console.error('Erro ao enviar WhatsApp:', error);
+        throw error;
+    }
+};
+
+
+
 
