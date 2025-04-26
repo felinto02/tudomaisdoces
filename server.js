@@ -432,7 +432,16 @@ const initWhatsAppClient = () => {
     multidevice: true,
     headless: true,
     disableSpins: true,
-    logQR: true
+    logQR: true,
+    puppryrrtOptions: {
+        args: ['--no-sandbox', '--disable-setuid-sandbox'] //Necessario para cloud
+    },
+    statusFind: (statusSession) => {
+        console.log('Status da Sessão WhatsApp:', statusSession);
+        if (statusSession === 'qrReadSuccess') {
+            console.log('Cliente WhatsApp pronto!');
+        }
+    } 
   })
   .then((client) => {
     whatsappClient = client;
