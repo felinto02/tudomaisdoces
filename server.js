@@ -498,14 +498,15 @@ const startServer = async () => {
   await createUploadDirs();
   
   // Inicializa o cliente WhatsApp
+  console.log('🔄 Iniciando WhatsApp...');
   initWhatsAppClient();
 
 
 // ========== INICIALIZAÇÃO DO SERVIDOR ==========
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
-
+  app.listen(PORT, () => {
+    console.log(`=== SERVIDOR RODANDO NA PORTA ${PORT} ===`);
+    console.log('⚠️ Se estiver no Render, verifique os logs para o QR Code!');
+  });
 };
 // Inicie o servidor
 startServer().catch(err => {
