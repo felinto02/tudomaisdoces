@@ -1,6 +1,0 @@
-node_modules
-# Adicione estas linhas ao arquivo .gitignore (se não existir, crie)
-echo "node_modules/" >> .gitignore
-echo ".env" >> .gitignore
-echo ".wwebjs_auth/" >> .gitignore
-echo "tokens/" >> .gitignore
